@@ -1,315 +1,566 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lunox - Personal Portfolio (with mobile wheel)</title>
-  <link rel="icon" type="image/png" sizes="128x128" href="../img/Lunox.png">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <style>
-    :root{--bg:radial-gradient(circle,#002b2b 0%,#000 100%) fixed; --price:linear-gradient(135deg,#00ffff,#8000ff,#ff0000 70%); --marquee:linear-gradient(135deg,#32ffff 0%,#00FFFF 40%,#00bbbb 70%); --banner:#003232; --body:#000; --white:#fff; --gray:#4b4b4b; --title:#151519; --inverse:#131317; --pra:#999999; --base:#00ffff; --hover:#0bd1d1; --other:#ff0000; --cusborder:#262525; --icon-bg:#171717}
-    body{top:0 !important;color:var(--white) !important;overflow-x:hidden;background:var(--base);display:flex;justify-content:center;align-items:center;height:100vh}
-    #pageRoot{width:100%;height:100%;position:relative;transition:filter .12s ease, background .12s ease}
-    .custom_panel,.eyedropper,.buttons_grid .btn{display:flex;align-items:center;justify-content:center}
-    .custom_panel,.eyedropper{position:absolute;border-radius:50%;transition:all .2s ease;background:var(--white)}
-    .custom_panel.expanded{border-radius:10px;display:flex;flex-direction:row;z-index:2}
-    .eyedropper{top:50%;left:50%;transform:translate(-50%,-50%);background:none;border:none !important;display:flex;justify-content:center;align-items:center}
-    .eyedropper.hidden{opacity:0;pointer-events:none;transition:all .1s ease}
-    .control-box.panel{opacity:0;display:flex;align-items:center;justify-content:space-between;width:100%;pointer-events:none;transition:all .3s ease;overflow:hidden;padding:10px}
-    .custom_panel.expanded .control-box.panel{opacity:1;pointer-events:auto;gap:8px}
-    .custom_panel.expanded .sliders{display:flex;flex-direction:column;gap:5px;width:inherit;box-sizing:border-box}
-    .slider{appearance:none;height:13px;border-radius:8px;margin:3px 0;cursor:pointer;border:1px solid #000}
-    .slider::-webkit-slider-thumb{-webkit-appearance:none;width:21px;height:21px;border-radius:50%;background:rgb(224,224,224);border:2px solid rgb(88,88,88);box-shadow:0 0 3px rgba(0,0,0,.2);cursor:pointer}
-    .buttons_grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;align-items:center;position:relative}
-    .buttons_grid .btn{width:1.8em;height:1.8em;border-radius:50%;border:none;cursor:pointer;font-size:16px;color:white;box-shadow:inset 0 1px 2px rgba(255,255,255,.4),0 2px 6px rgba(0,0,0,.25);transition:all .2s ease}
-    .btn:hover{transform:scale(1.1)}
-    .apply{background:linear-gradient(to bottom right,#b0ffb0,#0ea946)}
-    .reset{background:linear-gradient(to bottom right,#ffe7b0,#e27c09)}
-    .change{background:linear-gradient(to bottom right,#c2e3ff,#0077ff)}
-    .close{background:linear-gradient(to bottom right,#ffb0b0,#e53935)}
-    .custom_panel,.eyedropper{width:4em;height:4em}
-    .custom_panel.expanded{width:20em;height:5.5em}
-    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.75);z-index:60}
-    .overlay.hidden{visibility:hidden;opacity:0;pointer-events:none;transition:all .12s ease}
-    .overlay .box{width:520px;max-width:calc(100% - 28px);background:var(--inverse);border-radius:14px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:12px;align-items:center;position:relative}
-    .overlay .overlay-close{position:absolute;right:10px;top:8px;background:transparent;color:var(--white);border:none;font-size:22px;cursor:pointer}
-    .wheel-wrap{display:flex;gap:18px;align-items:center;justify-content:center;width:100%;flex-wrap:wrap}
-    canvas#wheelCanvas{width:280px;height:280px;border-radius:50%;background:transparent;touch-action:none;box-shadow:inset 0 4px 20px rgba(0,0,0,.6);display:block;transition:filter .12s ease}
-    .wheel-sample{width:84px;height:84px;border-radius:50%;border:6px solid rgba(255,255,255,.08);box-shadow:inset 0 2px 10px rgba(0,0,0,.6)}
-    .overlay .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .overlay .controls button{padding:8px 14px;border-radius:10px;border:none;cursor:pointer}
-    @media (max-width:991px){.custom_panel.expanded .control-box.panel{display:none !important}}
-  </style>
+   <meta charset="utf-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Lunox - Personal Portfolio (with mobile wheel)</title>
+   <link rel="icon" type="image/png" sizes="128x128" href="../img/Lunox.png">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+   <style>
+      :root {
+         --bg: radial-gradient(circle, #002b2b 0%, #000 100%) fixed;
+         --price: linear-gradient(135deg, #00ffff, #8000ff, #ff0000 70%);
+         --marquee: linear-gradient(135deg, #32ffff 0%, #00FFFF 40%, #00bbbb 70%);
+         --banner: #003232;
+         --body: #000;
+         --white: #fff;
+         --gray: #4b4b4b;
+         --title: #151519;
+         --inverse: #131317;
+         --pra: #999999;
+         --base: #00ffff;
+         --hover: #0bd1d1;
+         --other: #ff0000;
+         --cusborder: #262525;
+         --icon-bg: #171717
+      }
+
+      body {
+         top: 0 !important;
+         color: var(--white) !important;
+         overflow-x: hidden;
+         background: var(--base);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 100vh
+      }
+
+      #pageRoot {
+         width: 100%;
+         height: 100%;
+         position: relative;
+         transition: filter .12s ease, background .12s ease
+      }
+
+      .custom_panel,
+      .eyedropper,
+      .buttons_grid .btn {
+         display: flex;
+         align-items: center;
+         justify-content: center
+      }
+
+      .custom_panel,
+      .eyedropper {
+         position: absolute;
+         border-radius: 50%;
+         transition: all .2s ease;
+         background: var(--white)
+      }
+
+      .custom_panel.expanded {
+         border-radius: 10px;
+         display: flex;
+         flex-direction: row;
+         z-index: 2
+      }
+
+      .eyedropper {
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         background: none;
+         border: none !important;
+         display: flex;
+         justify-content: center;
+         align-items: center
+      }
+
+      .eyedropper.hidden {
+         opacity: 0;
+         pointer-events: none;
+         transition: all .1s ease
+      }
+
+      .control-box.panel {
+         opacity: 0;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         width: 100%;
+         pointer-events: none;
+         transition: all .3s ease;
+         overflow: hidden;
+         padding: 10px
+      }
+
+      .custom_panel.expanded .control-box.panel {
+         opacity: 1;
+         pointer-events: auto;
+         gap: 8px
+      }
+
+      .custom_panel.expanded .sliders {
+         display: flex;
+         flex-direction: column;
+         gap: 5px;
+         width: inherit;
+         box-sizing: border-box
+      }
+
+      .slider {
+         appearance: none;
+         height: 13px;
+         border-radius: 8px;
+         margin: 3px 0;
+         cursor: pointer;
+         border: 1px solid #000
+      }
+
+      .slider::-webkit-slider-thumb {
+         -webkit-appearance: none;
+         width: 21px;
+         height: 21px;
+         border-radius: 50%;
+         background: rgb(224, 224, 224);
+         border: 2px solid rgb(88, 88, 88);
+         box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+         cursor: pointer
+      }
+
+      .buttons_grid {
+         display: grid;
+         grid-template-columns: repeat(2, 1fr);
+         gap: 5px;
+         align-items: center;
+         position: relative
+      }
+
+      .buttons_grid .btn {
+         width: 1.8em;
+         height: 1.8em;
+         border-radius: 50%;
+         border: none;
+         cursor: pointer;
+         font-size: 16px;
+         color: white;
+         box-shadow: inset 0 1px 2px rgba(255, 255, 255, .4), 0 2px 6px rgba(0, 0, 0, .25);
+         transition: all .2s ease
+      }
+
+      .btn:hover {
+         transform: scale(1.1)
+      }
+
+      .apply {
+         background: linear-gradient(to bottom right, #b0ffb0, #0ea946)
+      }
+
+      .reset {
+         background: linear-gradient(to bottom right, #ffe7b0, #e27c09)
+      }
+
+      .change {
+         background: linear-gradient(to bottom right, #c2e3ff, #0077ff)
+      }
+
+      .close {
+         background: linear-gradient(to bottom right, #ffb0b0, #e53935)
+      }
+
+      .custom_panel,
+      .eyedropper {
+         width: 4em;
+         height: 4em
+      }
+
+      .custom_panel.expanded {
+         width: 20em;
+         height: 5.5em
+      }
+
+      .overlay {
+         position: fixed;
+         inset: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background: rgba(0, 0, 0, .75);
+         z-index: 60
+      }
+
+      .overlay.hidden {
+         visibility: hidden;
+         opacity: 0;
+         pointer-events: none;
+         transition: all .12s ease
+      }
+
+      .overlay .box {
+         width: 520px;
+         max-width: calc(100% - 28px);
+         background: var(--inverse);
+         border-radius: 14px;
+         padding: 16px;
+         box-shadow: 0 20px 50px rgba(0, 0, 0, .7);
+         display: flex;
+         flex-direction: column;
+         gap: 12px;
+         align-items: center;
+         position: relative
+      }
+
+      .overlay .overlay-close {
+         position: absolute;
+         right: 10px;
+         top: 8px;
+         background: transparent;
+         color: var(--white);
+         border: none;
+         font-size: 22px;
+         cursor: pointer
+      }
+
+      .wheel-wrap {
+         display: flex;
+         gap: 18px;
+         align-items: end;
+         justify-content: center;
+         width: 100%;
+         flex-wrap: wrap;
+         gap: 2em;
+      }
+
+      canvas#wheelCanvas {
+         width: 280px;
+         height: 280px;
+         border-radius: 50%;
+         background: transparent;
+         touch-action: none;
+         box-shadow: inset 0 4px 20px rgba(0, 0, 0, .6);
+         display: block;
+         transition: filter .12s ease
+      }
+
+      .seleted,
+      .sample {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 1.2em;
+      }
+
+      .wheel-sample {
+         width: 84px;
+         height: 84px;
+         border-radius: 50%;
+         border: 6px solid rgba(255, 255, 255, .08);
+         box-shadow: inset 0 2px 10px rgba(0, 0, 0, .6)
+      }
+
+      .overlay .controls {
+         display: flex;
+         gap: 10px;
+         align-items: center;
+         flex-wrap: wrap
+      }
+
+      .overlay .controls button {
+         padding: 8px 14px;
+         border-radius: 10px;
+         border: none;
+         cursor: pointer
+      }
+
+      @media (max-width:991px) {
+         .custom_panel.expanded .control-box.panel {
+            display: none !important
+         }
+      }
+
+      @media (max-width:576px) {
+         .sample {
+            flex-direction: row;
+            gap: 2em;
+         }
+      }
+   </style>
 </head>
+
 <body>
 
-  <div id="pageRoot">
-    <div class="custom_panel" id="panelRoot">
-      <button class="eyedropper" id="themeToggle" title="Theme"><i class="bi bi-eyedropper"></i></button>
-      <div class="control-box panel">
-        <div class="sliders">
-          <input class="slider colors" title="Hue" type="range" id="hue" min="0" max="360" value="0">
-          <input class="slider sat" title="Saturation" type="range" id="saturation" min="0" max="200" value="100">
-          <input class="slider light" type="range" id="lightness" min="0" max="100" value="50">
-          <input class="slider cont d-none" type="range" id="contrast" min="0" max="100" value="0">
-        </div>
-        <div class="buttons_grid panel">
-          <button class="btn apply" title="Apply"><i class="bi bi-check-lg"></i></button>
-          <button class="btn close" title="Close"><i class="bi bi-x-lg"></i></button>
-          <button class="btn change"><i></i></button>
-          <button class="btn reset" title="Default"><i class="bi bi-arrow-clockwise"></i></button>
-        </div>
+   <div id="pageRoot">
+      <div class="custom_panel" id="panelRoot">
+         <button class="eyedropper" id="themeToggle" title="Theme"><i class="bi bi-eyedropper"></i></button>
+         <div class="control-box panel">
+            <div class="sliders">
+               <input class="slider colors" title="Hue" type="range" id="hue" min="0" max="360" value="0">
+               <input class="slider sat" title="Saturation" type="range" id="saturation" min="0" max="200" value="100">
+               <input class="slider light" type="range" id="lightness" min="0" max="100" value="50">
+               <input class="slider cont d-none" type="range" id="contrast" min="0" max="100" value="0">
+            </div>
+            <div class="buttons_grid panel">
+               <button class="btn apply" title="Apply"><i class="bi bi-check-lg"></i></button>
+               <button class="btn close" title="Close"><i class="bi bi-x-lg"></i></button>
+               <button class="btn change"><i></i></button>
+               <button class="btn reset" title="Default"><i class="bi bi-arrow-clockwise"></i></button>
+            </div>
+         </div>
       </div>
-    </div>
-    <!-- your page content here -->
-  </div>
+      <!-- your page content here -->
+   </div>
 
-  <div id="colorOverlay" class="overlay hidden" aria-hidden="true">
-    <div class="box" role="dialog" aria-modal="true">
-      <button class="overlay-close" id="overlayClose" title="Close">✕</button>
-      <div class="wheel-wrap">
-        <canvas id="wheelCanvas" width="560" height="560" aria-label="Color wheel"></canvas>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-          <div id="background" class="wheel-sample"></div>
-          <div id="foreground" class="wheel-sample"></div>
-          <div>Selected</div>
-        </div>
+   <div id="colorOverlay" class="overlay hidden" aria-hidden="true">
+      <div class="box" role="dialog" aria-modal="true">
+         <button class="overlay-close" id="overlayClose" title="Close">✕</button>
+         <div class="wheel-wrap">
+            <canvas id="wheelCanvas" width="560" height="560" aria-label="Color wheel"></canvas>
+            <div class="seleted">
+               <div class="sample">
+                  <div id="background" class="wheel-sample"></div>
+                  <div id="foreground" class="wheel-sample"></div>
+               </div>
+               <div>Selected</div>
+            </div>
+         </div>
+         <div class="controls">
+            <button id="overlayApply" class="btn apply">Apply</button>
+            <button id="overlayDefault" class="btn reset">Default</button>
+            <button id="overlayContrast" class="btn change">Contrast</button>
+         </div>
       </div>
-      <div class="controls">
-        <button id="overlayApply" class="btn apply">Apply</button>
-        <button id="overlayDefault" class="btn reset">Default</button>
-        <button id="overlayContrast" class="btn change">Contrast</button>
-      </div>
-    </div>
-  </div>
+   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 
-  <script>
-  (function(){
-    const $ = sel=>document.querySelector(sel), $$=sel=>$(sel).classList, val=el=>+el.value, clamp=(v,min=0,max=100)=>Math.max(min,Math.min(max,v));
+   <script>
+      (function () {
+         const $ = sel => document.querySelector(sel), $$ = sel => $(sel).classList, val = el => +el.value, clamp = (v, min = 0, max = 100) => Math.max(min, Math.min(max, v));
 
-    const root = document.documentElement;
-    const hueEl = $('#hue'), satEl = $('#saturation'), lightEl = $('#lightness'), contEl = $('#contrast');
-    const pageRoot = $('#pageRoot');
-    const $change = $('.btn.change'), $reset = $('.btn.reset'), $toggle = $('#themeToggle'), $panel = $('.custom_panel'), $close = $('.btn.close');
+         const root = document.documentElement;
+         const hueEl = $('#hue'), satEl = $('#saturation'), lightEl = $('#lightness'), contEl = $('#contrast');
+         const pageRoot = $('#pageRoot');
+         const $change = $('.btn.change'), $reset = $('.btn.reset'), $toggle = $('#themeToggle'), $panel = $('.custom_panel'), $close = $('.btn.close');
 
-    let showContrast = false, lastLightVal = val(lightEl), lastContVal = val(contEl);
+         let showContrast = false, lastLightVal = val(lightEl), lastContVal = val(contEl);
 
-    hueEl.style.background = `linear-gradient(to right, ${[...Array(361)].map((_,i)=>`hsl(${i},100%,50%)`).join(',')})`;
+         hueEl.style.background = `linear-gradient(to right, ${[...Array(361)].map((_, i) => `hsl(${i},100%,50%)`).join(',')})`;
 
-    const updateTracks = ()=>{
-      const h = val(hueEl);
-      satEl.style.background = `linear-gradient(to right, hsl(${h},0%,50%), hsl(${h},100%,50%))`;
-      lightEl.style.background = `linear-gradient(to right, hsl(${h},100%,0%), hsl(${h},100%,50%), hsl(${h},100%,100%))`;
-      contEl.style.background = `linear-gradient(to right, hsl(${h},100%,100%), hsl(${h},100%,50%), hsl(${h},100%,0%))`;
-    };
+         const updateTracks = () => {
+            const h = val(hueEl);
+            satEl.style.background = `linear-gradient(to right, hsl(${h},0%,50%), hsl(${h},100%,50%))`;
+            lightEl.style.background = `linear-gradient(to right, hsl(${h},100%,0%), hsl(${h},100%,50%), hsl(${h},100%,100%))`;
+            contEl.style.background = `linear-gradient(to right, hsl(${h},100%,100%), hsl(${h},100%,50%), hsl(${h},100%,0%))`;
+         };
 
-    // minimal parse helpers (kept from your file)
-    const parseColor = str=>{
-      str=(str||'').trim();
-      if(str.startsWith('#')){ let hex=str.slice(1); if(hex.length===3) hex=hex.split('').map(c=>c+c).join(''); return [0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)); }
-      return str.match(/-?\d+(\.\d+)?/g)?.slice(0,3).map(Number) || [0,0,0];
-    };
-    const rgbToHSL = ([r,g,b])=>{
-      r=(r||0)/255; g=(g||0)/255; b=(b||0)/255;
-      const max=Math.max(r,g,b), min=Math.min(r,g,b), d = max-min;
-      let h=0, l=(max+min)/2, s=d? d/(1-Math.abs(2*l-1)) : 0;
-      if(d){
-        if(max===r) h=(g-b)/d + (g<b?6:0);
-        else if(max===g) h=(b-r)/d + 2;
-        else h=(r-g)/d + 4;
-        h *= 60;
-      }
-      return [h, s*100, l*100];
-    };
+         // minimal parse helpers (kept from your file)
+         const parseColor = str => {
+            str = (str || '').trim();
+            if (str.startsWith('#')) { let hex = str.slice(1); if (hex.length === 3) hex = hex.split('').map(c => c + c).join(''); return [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16)); }
+            return str.match(/-?\d+(\.\d+)?/g)?.slice(0, 3).map(Number) || [0, 0, 0];
+         };
+         const rgbToHSL = ([r, g, b]) => {
+            r = (r || 0) / 255; g = (g || 0) / 255; b = (b || 0) / 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+            let h = 0, l = (max + min) / 2, s = d ? d / (1 - Math.abs(2 * l - 1)) : 0;
+            if (d) {
+               if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+               else if (max === g) h = (b - r) / d + 2;
+               else h = (r - g) / d + 4;
+               h *= 60;
+            }
+            return [h, s * 100, l * 100];
+         };
 
-    const gradientVars = ['--bg','--marquee','--price'];
-    const colorVars = ['--body','--white','--gray','--title','--inverse','--pra','--base','--hover','--banner','--cusborder','--icon-bg','--other'];
-    const vars = [...gradientVars, ...colorVars];
-    const original = Object.fromEntries(vars.map(v=>{ const raw=getComputedStyle(root).getPropertyValue(v).trim(); return [v, raw]; }));
+         const gradientVars = ['--bg', '--marquee', '--price'];
+         const colorVars = ['--body', '--white', '--gray', '--title', '--inverse', '--pra', '--base', '--hover', '--banner', '--cusborder', '--icon-bg', '--other'];
+         const vars = [...gradientVars, ...colorVars];
+         const original = Object.fromEntries(vars.map(v => { const raw = getComputedStyle(root).getPropertyValue(v).trim(); return [v, raw]; }));
 
-    function applyAll(){
-      const hueVal = val(hueEl), sShift = val(satEl)-100, lShift = (val(lightEl)-50)*2, cFrac = val(contEl)/100;
-      vars.forEach(v=>{
-        const raw = original[v];
-        const useContrast = showContrast;
-        if(gradientVars.includes(v)){
-          const colors = raw.match(/#[0-9a-f]{3,6}|rgb[a]?\([^)]*\)|hsl[a]?\([^)]*\)/gi);
-          if(!colors) return;
-          let updated = raw;
-          colors.forEach(origColor=>{
-            const hsl = rgbToHSL(parseColor(origColor));
-            let h1 = (hsl[0] + hueVal + 360)%360;
-            let s1 = clamp(hsl[1] + sShift);
-            let lBase = clamp(hsl[2] + lShift);
-            let l1 = useContrast ? lBase*(1-cFrac) + (100-lBase)*cFrac : lBase;
-            const newColor = `hsl(${h1.toFixed()},${s1.toFixed()}%,${l1.toFixed()}%)`;
-            const safeRegex = new RegExp(origColor.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');
-            updated = updated.replace(safeRegex, newColor);
-          });
-          root.style.setProperty(v, updated);
-        } else {
-          const rgb = parseColor(raw);
-          const hsl = rgbToHSL(rgb);
-          let h1 = (hsl[0] + hueVal + 360)%360;
-          let s1 = clamp(hsl[1] + sShift);
-          let lBase = clamp(hsl[2] + lShift);
-          let l1 = useContrast ? lBase*(1-cFrac) + (100-lBase)*cFrac : lBase;
-          root.style.setProperty(v, `hsl(${h1.toFixed()},${s1.toFixed()}%,${l1.toFixed()}%)`);
-          if(v==='--base'){
-            let baseColor = getComputedStyle(root).getPropertyValue('--base').trim();
-            let [r,g,b] = parseColor(baseColor);
-            let yiq = (r*299 + g*587 + b*114)/1000;
-            let titleColor = (yiq>=128? '#fff' : '#151519');
-            root.style.setProperty('--title', titleColor);
-          }
-        }
-      });
-      const overlayOpen = !document.querySelector('#colorOverlay').classList.contains('hidden');
-      if(overlayOpen) { if(typeof drawIndicatorFromSliders === 'function') drawIndicatorFromSliders(); }
-    }
+         function applyAll() {
+            const hueVal = val(hueEl), sShift = val(satEl) - 100, lShift = (val(lightEl) - 50) * 2, cFrac = val(contEl) / 100;
+            vars.forEach(v => {
+               const raw = original[v];
+               const useContrast = showContrast;
+               if (gradientVars.includes(v)) {
+                  const colors = raw.match(/#[0-9a-f]{3,6}|rgb[a]?\([^)]*\)|hsl[a]?\([^)]*\)/gi);
+                  if (!colors) return;
+                  let updated = raw;
+                  colors.forEach(origColor => {
+                     const hsl = rgbToHSL(parseColor(origColor));
+                     let h1 = (hsl[0] + hueVal + 360) % 360;
+                     let s1 = clamp(hsl[1] + sShift);
+                     let lBase = clamp(hsl[2] + lShift);
+                     let l1 = useContrast ? lBase * (1 - cFrac) + (100 - lBase) * cFrac : lBase;
+                     const newColor = `hsl(${h1.toFixed()},${s1.toFixed()}%,${l1.toFixed()}%)`;
+                     const safeRegex = new RegExp(origColor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+                     updated = updated.replace(safeRegex, newColor);
+                  });
+                  root.style.setProperty(v, updated);
+               } else {
+                  const rgb = parseColor(raw);
+                  const hsl = rgbToHSL(rgb);
+                  let h1 = (hsl[0] + hueVal + 360) % 360;
+                  let s1 = clamp(hsl[1] + sShift);
+                  let lBase = clamp(hsl[2] + lShift);
+                  let l1 = useContrast ? lBase * (1 - cFrac) + (100 - lBase) * cFrac : lBase;
+                  root.style.setProperty(v, `hsl(${h1.toFixed()},${s1.toFixed()}%,${l1.toFixed()}%)`);
+                  if (v === '--base') {
+                     let baseColor = getComputedStyle(root).getPropertyValue('--base').trim();
+                     let [r, g, b] = parseColor(baseColor);
+                     let yiq = (r * 299 + g * 587 + b * 114) / 1000;
+                     let titleColor = (yiq >= 128 ? '#fff' : '#151519');
+                     root.style.setProperty('--title', titleColor);
+                  }
+               }
+            });
+            const overlayOpen = !document.querySelector('#colorOverlay').classList.contains('hidden');
+            if (overlayOpen) { if (typeof drawIndicatorFromSliders === 'function') drawIndicatorFromSliders(); }
+         }
 
-    const updateBanner = ()=>{
-      // keep as before (no-op if bannerSection missing)
-    };
+         const updateBanner = () => {
+            // keep as before (no-op if bannerSection missing)
+         };
 
-    $reset.onclick = e=>{ e.preventDefault(); setTimeout(()=>{ /* keep your toggle behavior if needed */ },200); };
+         $reset.onclick = e => { e.preventDefault(); setTimeout(() => { /* keep your toggle behavior if needed */ }, 200); };
 
-    [hueEl, satEl, lightEl, contEl].forEach(slider=>{
-      slider.oninput = ()=>{ if(slider===lightEl) lastLightVal = val(lightEl); if(slider===contEl) lastContVal = val(contEl); if(slider===hueEl) updateTracks(); applyAll(); updateBanner(); };
-    });
+         [hueEl, satEl, lightEl, contEl].forEach(slider => {
+            slider.oninput = () => { if (slider === lightEl) lastLightVal = val(lightEl); if (slider === contEl) lastContVal = val(contEl); if (slider === hueEl) updateTracks(); applyAll(); updateBanner(); };
+         });
 
-    const toggleIcon = ()=>{
-      $change.innerHTML = `<i class="bi ${showContrast? 'bi-brightness-high-fill' : 'bi-circle-half'}"></i>`;
-      $change.title = showContrast? 'Lightness' : 'Contrast';
-      (showContrast ? contEl : lightEl).title = showContrast ? 'Contrast' : 'Lightness';
-    };
+         const toggleIcon = () => {
+            $change.innerHTML = `<i class="bi ${showContrast ? 'bi-brightness-high-fill' : 'bi-circle-half'}"></i>`;
+            $change.title = showContrast ? 'Lightness' : 'Contrast';
+            (showContrast ? contEl : lightEl).title = showContrast ? 'Contrast' : 'Lightness';
+         };
 
-    $change.onclick = ()=>{
-      if(showContrast){ lastContVal = val(contEl); lightEl.value = lastLightVal; }
-      else { lastLightVal = val(lightEl); contEl.value = lastContVal; }
-      showContrast = !showContrast;
-      $$('#lightness').toggle('d-none', showContrast);
-      $$('#contrast').toggle('d-none', !showContrast);
-      toggleIcon(); applyAll(); updateBanner();
-    };
+         $change.onclick = () => {
+            if (showContrast) { lastContVal = val(contEl); lightEl.value = lastLightVal; }
+            else { lastLightVal = val(lightEl); contEl.value = lastContVal; }
+            showContrast = !showContrast;
+            $$('#lightness').toggle('d-none', showContrast);
+            $$('#contrast').toggle('d-none', !showContrast);
+            toggleIcon(); applyAll(); updateBanner();
+         };
 
-    $reset.ondblclick = e=>{ e.preventDefault(); hueEl.value=215; satEl.value=100; lightEl.value=lastLightVal=50; contEl.value=lastContVal=0; showContrast=false; $$('#lightness').remove('d-none'); $$('#contrast').add('d-none'); toggleIcon(); updateTracks(); applyAll(); };
+         $reset.ondblclick = e => { e.preventDefault(); hueEl.value = 215; satEl.value = 100; lightEl.value = lastLightVal = 50; contEl.value = lastContVal = 0; showContrast = false; $$('#lightness').remove('d-none'); $$('#contrast').add('d-none'); toggleIcon(); updateTracks(); applyAll(); };
 
-    $toggle.onclick = e=>{ e.preventDefault(); if(window.innerWidth < 991) openOverlay(); else { $panel.classList.add('expanded'); $toggle.classList.add('hidden'); } };
-    $close.onclick = ()=>{ $panel.classList.remove('expanded'); setTimeout(()=> $toggle.classList.remove('hidden'),100); };
+         $toggle.onclick = e => { e.preventDefault(); if (window.innerWidth < 991) openOverlay(); else { $panel.classList.add('expanded'); $toggle.classList.add('hidden'); } };
+         $close.onclick = () => { $panel.classList.remove('expanded'); setTimeout(() => $toggle.classList.remove('hidden'), 100); };
 
-    // Canvas/wheel
-    const overlay = $('#colorOverlay'), overlayClose = $('#overlayClose');
-    const canvas = $('#wheelCanvas'), ctx = canvas.getContext && canvas.getContext('2d');
-    const background = $('#background'), foreground = $('#foreground');
-    const overlayApply = $('#overlayApply'), overlayDefault = $('#overlayDefault'), overlayContrast = $('#overlayContrast');
+         // Canvas/wheel
+         const overlay = $('#colorOverlay'), overlayClose = $('#overlayClose');
+         const canvas = $('#wheelCanvas'), ctx = canvas.getContext && canvas.getContext('2d');
+         const background = $('#background'), foreground = $('#foreground');
+         const overlayApply = $('#overlayApply'), overlayDefault = $('#overlayDefault'), overlayContrast = $('#overlayContrast');
 
-    function setCanvasSize(){ if(!canvas||!ctx) return; const rect = canvas.getBoundingClientRect(); const dpr = window.devicePixelRatio||1; canvas.width = Math.round(rect.width * dpr); canvas.height = Math.round(rect.height * dpr); ctx.setTransform(dpr,0,0,dpr,0,0); }
+         function setCanvasSize() { if (!canvas || !ctx) return; const rect = canvas.getBoundingClientRect(); const dpr = window.devicePixelRatio || 1; canvas.width = Math.round(rect.width * dpr); canvas.height = Math.round(rect.height * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
 
-    function drawWheelBaseOnly(){
-      if(!canvas||!ctx) return;
-      setCanvasSize();
-      const rect = canvas.getBoundingClientRect();
-      const w = rect.width, h = rect.height;
-      const cx = w/2, cy = h/2, r = Math.min(w,h)/2;
-      ctx.clearRect(0,0,w,h);
-      for(let a=0;a<360;a++){
-        const start = (a - 0.5) * Math.PI/180, end = (a + 0.5) * Math.PI/180;
-        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
-        ctx.fillStyle = `hsl(${a},100%,50%)`; ctx.fill();
-      }
-      const gg = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
-      gg.addColorStop(0,'rgba(255,255,255,1)'); gg.addColorStop(0.18,'rgba(255,255,255,0)');
-      ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.globalCompositeOperation = 'source-over';
-    }
+         function drawWheelBaseOnly() {
+            if (!canvas || !ctx) return;
+            setCanvasSize();
+            const rect = canvas.getBoundingClientRect();
+            const w = rect.width, h = rect.height;
+            const cx = w / 2, cy = h / 2, r = Math.min(w, h) / 2;
+            ctx.clearRect(0, 0, w, h);
+            for (let a = 0; a < 360; a++) {
+               const start = (a - 0.5) * Math.PI / 180, end = (a + 0.5) * Math.PI / 180;
+               ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, start, end); ctx.closePath();
+               ctx.fillStyle = `hsl(${a},100%,50%)`; ctx.fill();
+            }
+            const gg = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+            gg.addColorStop(0, 'rgba(255,255,255,1)'); gg.addColorStop(0.18, 'rgba(255,255,255,0)');
+            ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); ctx.globalCompositeOperation = 'source-over';
+         }
 
-    function hsToXY(h,s){
-      const rect = canvas.getBoundingClientRect();
-      const cx = rect.width/2, cy = rect.height/2, r = Math.min(rect.width, rect.height)/2;
-      const ang = h * Math.PI/180; const satFraction = clamp(s,0,100)/100; const dist = satFraction * r;
-      return { x: cx + Math.cos(ang)*dist, y: cy + Math.sin(ang)*dist };
-    }
+         function hsToXY(h, s) {
+            const rect = canvas.getBoundingClientRect();
+            const cx = rect.width / 2, cy = rect.height / 2, r = Math.min(rect.width, rect.height) / 2;
+            const ang = h * Math.PI / 180; const satFraction = clamp(s, 0, 100) / 100; const dist = satFraction * r;
+            return { x: cx + Math.cos(ang) * dist, y: cy + Math.sin(ang) * dist };
+         }
 
-    function xyToHS(clientX, clientY){
-      const rect = canvas.getBoundingClientRect();
-      const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
-      const dx = clientX - cx, dy = clientY - cy; const r = Math.min(rect.width, rect.height)/2;
-      const dist = Math.sqrt(dx*dx + dy*dy); const sat = clamp((dist/r)*100,0,100);
-      let angle = Math.atan2(dy,dx) * 180/Math.PI; if(angle < 0) angle += 360;
-      return { hue: angle, sat };
-    }
+         function xyToHS(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+            const dx = clientX - cx, dy = clientY - cy; const r = Math.min(rect.width, rect.height) / 2;
+            const dist = Math.sqrt(dx * dx + dy * dy); const sat = clamp((dist / r) * 100, 0, 100);
+            let angle = Math.atan2(dy, dx) * 180 / Math.PI; if (angle < 0) angle += 360;
+            return { hue: angle, sat };
+         }
 
-    // ---------- IMPORTANT: updated to set foreground as exact opposite ----------
-    function drawIndicatorFromSliders(){
-      if(!canvas || !ctx) return;
-      drawWheelBaseOnly();
-      const rawSat = val(satEl);
-      const satForWheel = Math.min(100, rawSat);
-      const h = val(hueEl), s = satForWheel;
-      const { x, y } = hsToXY(h, s);
-      ctx.beginPath(); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.arc(x,y,8,0,Math.PI*2); ctx.fill(); ctx.stroke();
+         // ---------- IMPORTANT: updated to set foreground as exact opposite ----------
+         function drawIndicatorFromSliders() {
+            if (!canvas || !ctx) return;
+            drawWheelBaseOnly();
+            const rawSat = val(satEl);
+            const satForWheel = Math.min(100, rawSat);
+            const h = val(hueEl), s = satForWheel;
+            const { x, y } = hsToXY(h, s);
+            ctx.beginPath(); ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.arc(x, y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
-      const sampleLight = val(lightEl); // 0..100
-      const sampleSat = (rawSat > 100 ? 100 : rawSat);
+            const sampleLight = val(lightEl); // 0..100
+            const sampleSat = (rawSat > 100 ? 100 : rawSat);
 
-      // background sample => exactly selected HSL
-      if(background) background.style.background = `hsl(${Math.round(h)},${Math.round(sampleSat)}%,${Math.round(sampleLight)}%)`;
+            // background sample => exactly selected HSL
+            if (background) background.style.background = `hsl(${Math.round(h)},${Math.round(sampleSat)}%,${Math.round(sampleLight)}%)`;
 
-      // foreground sample => opposite (complementary) hue and inverted lightness,
-      // clamp inverted lightness to avoid pure black/white extremes
-      if(foreground){
-        const oppHue = Math.round((h + 180) % 360);
-        // invert lightness and clamp to [12,88]
-        let invLight = Math.round(100 - sampleLight);
-        invLight = Math.max(12, Math.min(88, invLight));
-        // use same (or slightly higher) saturation for visibility
-        const fgSat = Math.max(40, Math.round(sampleSat));
-        foreground.style.background = `hsl(${oppHue}, ${fgSat}%, ${invLight}%)`;
-      }
-    }
+            // foreground sample => opposite (complementary) hue and inverted lightness,
+            // clamp inverted lightness to avoid pure black/white extremes
+            if (foreground) {
+               const oppHue = Math.round((h + 180) % 360);
+               // invert lightness and clamp to [12,88]
+               let invLight = Math.round(100 - sampleLight);
+               invLight = Math.max(12, Math.min(88, invLight));
+               // use same (or slightly higher) saturation for visibility
+               const fgSat = Math.max(40, Math.round(sampleSat));
+               foreground.style.background = `hsl(${oppHue}, ${fgSat}%, ${invLight}%)`;
+            }
+         }
 
-    let isPointerDown = false;
-    function handlePointer(e){ e.preventDefault(); const clientX = (e.touches? e.touches[0].clientX : e.clientX); const clientY = (e.touches? e.touches[0].clientY : e.clientY); const { hue, sat } = xyToHS(clientX, clientY); hueEl.value = Math.round(hue); satEl.value = Math.round(sat); updateTracks(); applyAll(); updateBanner(); drawIndicatorFromSliders(); }
-    if(canvas && ctx){
-      canvas.addEventListener('mousedown', e=>{ isPointerDown = true; handlePointer(e); });
-      window.addEventListener('mousemove', e=>{ if(isPointerDown) handlePointer(e); });
-      window.addEventListener('mouseup', ()=>{ isPointerDown = false; });
-      canvas.addEventListener('touchstart', e=>{ isPointerDown = true; handlePointer(e); }, { passive: false });
-      canvas.addEventListener('touchmove', e=>{ if(isPointerDown) handlePointer(e); }, { passive: false });
-      canvas.addEventListener('touchend', ()=>{ isPointerDown = false; });
-    }
+         let isPointerDown = false;
+         function handlePointer(e) { e.preventDefault(); const clientX = (e.touches ? e.touches[0].clientX : e.clientX); const clientY = (e.touches ? e.touches[0].clientY : e.clientY); const { hue, sat } = xyToHS(clientX, clientY); hueEl.value = Math.round(hue); satEl.value = Math.round(sat); updateTracks(); applyAll(); updateBanner(); drawIndicatorFromSliders(); }
+         if (canvas && ctx) {
+            canvas.addEventListener('mousedown', e => { isPointerDown = true; handlePointer(e); });
+            window.addEventListener('mousemove', e => { if (isPointerDown) handlePointer(e); });
+            window.addEventListener('mouseup', () => { isPointerDown = false; });
+            canvas.addEventListener('touchstart', e => { isPointerDown = true; handlePointer(e); }, { passive: false });
+            canvas.addEventListener('touchmove', e => { if (isPointerDown) handlePointer(e); }, { passive: false });
+            canvas.addEventListener('touchend', () => { isPointerDown = false; });
+         }
 
-    window.addEventListener('resize', ()=>{ if(!overlay.classList.contains('hidden')) drawIndicatorFromSliders(); });
+         window.addEventListener('resize', () => { if (!overlay.classList.contains('hidden')) drawIndicatorFromSliders(); });
 
-    function openOverlay(){ overlay.classList.remove('hidden'); overlay.setAttribute('aria-hidden','false'); drawIndicatorFromSliders(); }
-    function closeOverlay(){ overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden','true'); }
-    overlayClose && overlayClose.addEventListener('click', closeOverlay);
-    overlay && overlay.addEventListener('click', ev=>{ if(ev.target === overlay) closeOverlay(); });
+         function openOverlay() { overlay.classList.remove('hidden'); overlay.setAttribute('aria-hidden', 'false'); drawIndicatorFromSliders(); }
+         function closeOverlay() { overlay.classList.add('hidden'); overlay.setAttribute('aria-hidden', 'true'); }
+         overlayClose && overlayClose.addEventListener('click', closeOverlay);
+         overlay && overlay.addEventListener('click', ev => { if (ev.target === overlay) closeOverlay(); });
 
-    overlayApply && overlayApply.addEventListener('click', ()=> closeOverlay());
-    overlayDefault && overlayDefault.addEventListener('click', ()=>{
-      hueEl.value = 215; satEl.value = 100; lightEl.value = 50; contEl.value = 0;
-      lastLightVal = 50; lastContVal = 0; showContrast = false; $$('#lightness').remove('d-none'); $$('#contrast').add('d-none'); toggleIcon(); updateTracks(); applyAll(); drawIndicatorFromSliders(); closeOverlay();
-    });
+         overlayApply && overlayApply.addEventListener('click', () => closeOverlay());
+         overlayDefault && overlayDefault.addEventListener('click', () => {
+            hueEl.value = 215; satEl.value = 100; lightEl.value = 50; contEl.value = 0;
+            lastLightVal = 50; lastContVal = 0; showContrast = false; $$('#lightness').remove('d-none'); $$('#contrast').add('d-none'); toggleIcon(); updateTracks(); applyAll(); drawIndicatorFromSliders(); closeOverlay();
+         });
 
-    overlayContrast && overlayContrast.addEventListener('click', ()=>{
-      if(!showContrast){ lastLightVal = val(lightEl); showContrast = true; $$('#lightness').add('d-none'); $$('#contrast').remove('d-none'); }
-      const current = val(contEl); contEl.value = (current >= 50 ? 0 : 100); lastContVal = val(contEl);
-      toggleIcon(); updateTracks(); applyAll(); drawIndicatorFromSliders();
-    });
+         overlayContrast && overlayContrast.addEventListener('click', () => {
+            if (!showContrast) { lastLightVal = val(lightEl); showContrast = true; $$('#lightness').add('d-none'); $$('#contrast').remove('d-none'); }
+            const current = val(contEl); contEl.value = (current >= 50 ? 0 : 100); lastContVal = val(contEl);
+            toggleIcon(); updateTracks(); applyAll(); drawIndicatorFromSliders();
+         });
 
-    // init
-    updateTracks(); applyAll(); toggleIcon();
-    if(canvas && ctx) setTimeout(()=>{ drawWheelBaseOnly(); drawIndicatorFromSliders(); }, 30);
+         // init
+         updateTracks(); applyAll(); toggleIcon();
+         if (canvas && ctx) setTimeout(() => { drawWheelBaseOnly(); drawIndicatorFromSliders(); }, 30);
 
-  })();
-  </script>
+      })();
+   </script>
 
 </body>
+
 </html>
